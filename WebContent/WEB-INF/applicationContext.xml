@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+
+		<property name="url">
+			<value>jdbc:mysql://localhost:3306/taskmanager</value>
+		</property>
+
+		<property name="username">
+			<value>tm</value>
+		</property>
+
+		<property name="password">
+			<value>tmadmin</value>
+		</property>
+
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+
+		<property name="mappingResources">
+			<list>
+				<value>com/taskmanager/entity/Admin.hbm.xml</value>
+				<value>com/taskmanager/entity/Course.hbm.xml</value>
+				<value>com/taskmanager/entity/CourseMap.hbm.xml</value>
+				<value>com/taskmanager/entity/Info.hbm.xml</value>
+				<value>com/taskmanager/entity/Reg.hbm.xml</value>
+				<value>com/taskmanager/entity/Student.hbm.xml</value>
+				<value>com/taskmanager/entity/Task.hbm.xml</value>
+				<value>com/taskmanager/entity/TaskMap.hbm.xml</value>
+				<value>com/taskmanager/entity/Teacher.hbm.xml</value>
+			</list>
+		</property>
+
+
+		<property name="hibernateProperties">
+
+			<props>
+
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+
+			</props>
+
+		</property>
+
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+
+	<!-- adminDao -->
+	<bean id="adminDao" class="com.taskmanager.dao.impl.AdminDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="adminServiceTarget" class="com.taskmanager.service.impl.AdminServiceImpl">
+		<property name="adminDao" ref="adminDao"></property>
+	</bean>
+
+	<bean id="adminService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="adminServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="UploadAction" class="com.taskmanager.action.upload.UploadAction"
+		scope="prototype">
+	</bean>
+	<bean id="AdminAction" class="com.taskmanager.action.admin.AdminAction" 
+		scope="prototype">
+		<property name="adminService" ref="adminService"></property>
+	</bean>
+	<bean id="ScanAdminAction" class="com.taskmanager.action.admin.ScanAdminAction" scope="prototype">
+		<property name="adminService" ref="adminService"></property>
+	</bean>
+	<bean id="LoginAction" class="com.taskmanager.action.more.LoginAction"
+		scope="prototype">
+		<property name="adminService" ref="adminService"></property>
+		<property name="teacherService" ref="teacherService"></property>
+		<property name="studentService" ref="studentService"></property>
+		<property name="infoService" ref="infoService"></property>
+	</bean>
+	<!-- TeacherDao -->
+	<bean id="teacherDao" class="com.taskmanager.dao.impl.TeacherDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="teacherServiceTarget" class="com.taskmanager.service.impl.TeacherServiceImpl">
+		<property name="teacherDao" ref="teacherDao"></property>
+	</bean>
+
+	<bean id="teacherService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="teacherServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="teacherAction" class="com.taskmanager.action.teacher.TeacherAction" scope="prototype">
+		<property name="teacherService" ref="teacherService"></property>
+	</bean>
+	<bean id="ScanTeacherAction" class="com.taskmanager.action.teacher.ScanTeacherAction" scope="prototype">
+		<property name="teacherService" ref="teacherService"></property>
+	</bean>
+	<!-- StudentDao -->
+	<bean id="studentDao" class="com.taskmanager.dao.impl.StudentDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="studentServiceTarget" class="com.taskmanager.service.impl.StudentServiceImpl">
+		<property name="studentDao" ref="studentDao"></property>
+	</bean>
+
+	<bean id="studentService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="studentServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="StudentAction" class="com.taskmanager.action.student.StudentAction"
+		scope="prototype">
+		<property name="studentService" ref="studentService"></property>
+		<property name="regService" ref="regService"></property>
+		<property name="courseMapService" ref="courseMapService"></property>
+	</bean>
+	<!-- InfoDao -->
+	<bean id="infoDao" class="com.taskmanager.dao.impl.InfoDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="infoServiceTarget" class="com.taskmanager.service.impl.InfoServiceImpl">
+		<property name="infoDao" ref="infoDao"></property>
+	</bean>
+
+	<bean id="infoService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="infoServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="infoAction" class="com.taskmanager.action.info.InfoAction" 
+		scope="prototype">
+		<property name="infoService" ref="infoService"></property>
+		<property name="teacherService" ref="teacherService"></property>
+	</bean>
+	<bean id="ScanInfo" class="com.taskmanager.action.info.ScanInfoAction" 
+		scope="prototype">
+		<property name="infoService" ref="infoService"></property>
+	</bean>
+	<!-- RegDao -->
+	<bean id="regDao" class="com.taskmanager.dao.impl.RegDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="regServiceTarget" class="com.taskmanager.service.impl.RegServiceImpl">
+		<property name="regDao" ref="regDao"></property>
+	</bean>
+
+	<bean id="regService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="regServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="RegAction" class="com.taskmanager.action.more.RegAction"
+		scope="prototype">
+		<property name="regService" ref="regService"></property>
+		<property name="studentService" ref="studentService"></property>
+		<property name="courseService" ref="courseService"></property>
+	</bean>
+	<bean id="ScanRegAction" class="com.taskmanager.action.more.ScanRegAction"
+		scope="prototype">
+		<property name="regService" ref="regService"></property>
+	</bean>
+	<!-- CourseDao -->
+	<bean id="courseDao" class="com.taskmanager.dao.impl.CourseDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="courseServiceTarget" class="com.taskmanager.service.impl.CourseServiceImpl">
+		<property name="courseDao" ref="courseDao"></property>
+	</bean>
+
+	<bean id="courseService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="courseServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="CourseAction" class="com.taskmanager.action.course.CourseAction"
+		scope="prototype">
+		<property name="courseService" ref="courseService"></property>
+		<property name="teacherService" ref="teacherService"></property>
+	</bean>
+	<bean id="ScanCourseAction" class="com.taskmanager.action.course.ScanCourseAction" 
+		scope="prototype">
+		<property name="courseService" ref="courseService"></property>
+	</bean>
+	<!-- CourseMapDao -->
+	<bean id="courseMapDao" class="com.taskmanager.dao.impl.CourseMapDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="courseMapServiceTarget" class="com.taskmanager.service.impl.CourseMapServiceImpl">
+		<property name="courseMapDao" ref="courseMapDao"></property>
+	</bean>
+
+	<bean id="courseMapService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="courseMapServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="ScanCourseMapAction" class="com.taskmanager.action.course.ScanCourseMapAction"
+		scope="prototype">
+		<property name="courseMapService" ref="courseMapService"></property>
+		<property name="taskMapService" ref="taskMapService"></property>
+	</bean>
+	<!-- TaskDao -->
+	<bean id="taskDao" class="com.taskmanager.dao.impl.TaskDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="taskServiceTarget" class="com.taskmanager.service.impl.TaskServiceImpl">
+		<property name="taskDao" ref="taskDao"></property>
+	</bean>
+
+	<bean id="taskService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="taskServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="TaskAction" class="com.taskmanager.action.task.TaskAction"
+		scope="prototype">
+		<property name="taskService" ref="taskService"></property>
+		<property name="courseService" ref="courseService"></property>
+		<property name="teacherService" ref="teacherService"></property>
+		<property name="taskMapService" ref="taskMapService"></property>
+	</bean>
+	<bean id="ScanTaskAction" class="com.taskmanager.action.task.ScanTaskAction"
+		scope="prototype">
+		<property name="taskService" ref="taskService"></property>
+		<property name="courseService" ref="courseService"></property>
+		<property name="courseMapService" ref="courseMapService"></property>
+	</bean>
+	<!-- TaskMapDao -->
+	<bean id="taskMapDao" class="com.taskmanager.dao.impl.TaskMapDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="taskMapServiceTarget" class="com.taskmanager.service.impl.TaskMapServiceImpl">
+		<property name="taskMapDao" ref="taskMapDao"></property>
+	</bean>
+
+	<bean id="taskMapService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+
+		<property name="target" ref="taskMapServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+
+		</property>
+
+	</bean>
+	<bean id="TaskMapAction" class="com.taskmanager.action.task.TaskMapAction"
+		scope="prototype">
+		<property name="taskService" ref="taskService"></property>
+		<property name="taskMapService" ref="taskMapService"></property>
+	</bean>
+</beans>

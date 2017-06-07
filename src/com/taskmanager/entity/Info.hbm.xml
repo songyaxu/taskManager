@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping
+PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.taskmanager.entity.Info" table="info">
+		<id name="id" column="id" type="int">
+			<generator class="identity"> 
+			</generator>
+		</id>
+		<property name="style" column="style" type="int"></property>
+		<property name="name" column="name" type="string"></property>
+		<property name="author" column="author" type="string"></property>
+		<property name="teacherId" column="teacherId" type="int"></property>
+		<property name="teacherName" column="teacherName" type="string"></property>
+		<property name="courseId" column="courseId" type="int"></property>
+		<property name="courseName" column="courseName" type="string"></property>
+		<property name="content" column="content" type="text"></property>
+		<property name="attach" column="attach" type="string"></property>
+		<property name="time" column="time" type="timestamp"></property>
+	</class>
+</hibernate-mapping>
+

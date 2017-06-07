@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.saveDir" value="D:\workspace-jee\taskManager\WebContent\upload"/>
+	<constant name="struts.multipart.maxSize" value="10485760"/> 
+	<package name="taskManager" extends="struts-default">
+		<action name="Login" class="LoginAction">
+			<result name="success" type="dispatcher">/index.jsp</result>
+			<result name="input" type="dispatcher">/login.jsp</result>
+			<result name="logout" type="redirect">/login.jsp</result>
+		</action>
+		<action name="AdminLogout" class="AdminAction" method="logout">
+			<result name="success" type="redirect">/login.jsp</result>
+		</action>
+	</package>
+	<package name="info" extends="json-default">
+		<action name="infoService" class="infoAction">
+			<result name="AddSuccess" type="json"></result>
+			<result name="sessionReject" type="json"></result>
+			<result name="deleteSuccess" type="json"></result>
+			<result name="deleteReject" type="json"></result>
+			<result name="detailSuccess">/info/detail.jsp</result>
+		</action>
+		<action name="Uploadify" class="UploadAction" method="upload">
+			<result name="success" type="json"></result>
+		</action>
+		<action name="scaninfo" class="ScanInfo">
+			<result name="success">/info/list.jsp</result>
+			<result name="NextPage">/info/list.jsp</result>
+			<result name="frontPage">/info/list.jsp</result>
+		</action>
+		<action name="scanteacher" class="ScanTeacherAction">
+			<result name="success">/pub/listteacher.jsp</result>
+			<result name="NextPage">/pub/listteacher.jsp</result>
+			<result name="frontPage">/pub/listteacher.jsp</result>
+		</action>
+		<action name="scanadmin" class="ScanAdminAction">
+			<result name="success">/admin/listadmin.jsp</result>
+			<result name="NextPage">/admin/listadmin.jsp</result>
+			<result name="frontPage">/admin/listadmin.jsp</result>
+		</action>
+		<action name="adminservice" class="AdminAction">
+			<result name="addSuccess" type="json"></result>
+			<result name="addFailure" type="json"></result>
+			<result name="updateFailure" type="json"></result>
+			<result name="updateSuccess" type="json"></result>
+			<result name="deleteFailure" type="json"></result>
+			<result name="deleteSuccess" type="json"></result>
+			<result name="edit">/admin/edit.jsp</result>
+		</action>
+		<action name="teacherservice" class="teacherAction">
+			<result name="addSuccess" type="json"></result>
+			<result name="addFailure" type="json"></result>
+			<result name="updateFailure" type="json"></result>
+			<result name="updateSuccess" type="json"></result>
+			<result name="deleteFailure" type="json"></result>
+			<result name="deleteSuccess" type="json"></result>
+			<result name="edit">${pageContext.request.contextPath}/teacher/edit.jsp</result>
+		</action>
+		<action name="courseservice" class="CourseAction">
+			<result name="error" type="json"></result>
+			<result name="success" type="json"></result>
+			<result name="detailError">course/detail.jsp</result>
+			<result name="detailSuccess">course/detail.jsp</result>
+			<result name="edit">course/add.jsp</result>
+			<result name="queryError" type="json"></result>
+			<result name="querySuccess" type="json"></result>
+		</action>
+		<action name="scancourse" class="ScanCourseAction">
+			<result name="success">/course/list.jsp</result>
+			<result name="NextPage">/course/list.jsp</result>
+			<result name="frontPage">/course/list.jsp</result>
+		</action>
+		<action name="regservice" class="RegAction">
+			<result name="success" type="json"></result>
+			<result name="error" type="json"></result>
+			<result name="detailSuccess" type="json"></result>
+		</action>
+		<action name="scanreg" class="ScanRegAction">
+			<result name="success">/reg/list.jsp</result>
+		</action>
+		<action name="taskservice" class="TaskAction">
+			<result name="success" type="json"></result>
+			<result name="addError" type="json"></result>
+			<result name="editSuccess">/task/add.jsp</result>
+			<result name="detailSuccess">/task/detail.jsp</result>
+			<result name="error">/404.jsp</result>
+		</action>
+		<action name="scantask" class="ScanTaskAction">
+			<result name="success">/task/list.jsp</result>
+			<result name="NextPage">/task/list.jsp</result>
+			<result name="frontPage">/task/list.jsp</result>
+			<result name="error">/task/list.jsp</result>
+			<result name="stSuccess">/student/tasklist.jsp</result>
+		</action>
+		<action name="studentservice" class="StudentAction">
+			<result name="success" type="json"></result>
+			<result name="editSuccess">/student/edit.jsp</result>
+			<result name="updateError" type="json"></result>
+			<result name="update" type="json"></result>
+		</action>
+		<action name="taskmapservice" class="TaskMapAction">
+			<result name="success" type="json"></result>
+			<result name="error" type="json"></result>
+			<result name="editSuccess">/task/taskedit.jsp</result>
+			<result name="detailSuccess">/task/taskdetail.jsp</result>
+			<result name="scoreError" type="json"></result>
+			<result name="score" type="json"></result>
+		</action>
+		<action name="scancoursemap" class="ScanCourseMapAction">
+			<result name="success">/course/maplist.jsp</result>
+			<result name="NextPage">/course/maplist.jsp</result>
+			<result name="frontPage">/course/maplist.jsp</result>
+		</action>
+	</package>
+</struts>

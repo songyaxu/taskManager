@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping
+PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.taskmanager.entity.Course" table="course">
+		<id name="id" column="id" type="int">
+			<generator class="identity"> 
+			</generator>
+		</id>
+		<property name="no" column="no" type="string"></property>
+		<property name="name" column="name" type="string"></property>
+		<property name="teacherId" column="teacherId" type="int"></property>
+		<property name="teacherName" column="teacherName" type="string"></property>
+		<property name="style" column="style" type="string"></property>
+		<property name="content" column="content" type="text"></property>
+		<property name="outline" column="outline" type="text"></property>
+	</class>
+</hibernate-mapping>
+
