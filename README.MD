@@ -2,6 +2,7 @@
 ----
 
 ##参与者
+
 + 1.过客
 + 2.注册学生
 + 3.教师
@@ -61,4 +62,23 @@ jdk版本:jdk-8u121-windows-x64.exe
 添加内容是 URIEncoding="UTF-8" 
 ## 界面
 
+登录界面：
+
+![](img/login.png)
+
+管理员主界面：
+
+![](img/admin.png)
+
+教师主界面：
+
+![](img/teacher.png)
+
+发布新闻资讯：
+
+![](img/pub_news1.png)
+
+学生注册：
+
+![](img/reg.png)
 
